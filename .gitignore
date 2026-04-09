@@ -1,0 +1,5 @@
+node_modules/
+.firebase/
+_v*.js
+_fix*.js
+*.log
