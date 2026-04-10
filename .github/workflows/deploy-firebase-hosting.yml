@@ -1,0 +1,28 @@
+# Despliegue automático a Firebase Hosting al hacer push en main/master.
+# Configuración obligatoria en el repositorio GitHub:
+#   Settings → Secrets and variables → Actions → New repository secret
+#   Nombre: FIREBASE_TOKEN
+#   Valor: salida de `firebase login:ci` (Firebase CLI en tu máquina local).
+name: Deploy Firebase Hosting
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy to Firebase Hosting
+        run: npx firebase-tools@latest deploy --only hosting --project basededatosdebbiepro --non-interactive
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}

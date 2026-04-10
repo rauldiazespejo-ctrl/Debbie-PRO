@@ -14,13 +14,13 @@
   "prefer_related_applications": false,
   "icons": [
     {
-      "src": "/static/icon-192.png",
+      "src": "/icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/static/icon-512.png",
+      "src": "/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -32,13 +32,13 @@
       "name": "Rutinas",
       "short_name": "Rutinas",
       "url": "/?tab=ruts",
-      "icons": [{"src": "/static/icon-192.png", "sizes": "192x192"}]
+      "icons": [{"src": "/icons/icon-192.png", "sizes": "192x192"}]
     },
     {
       "name": "Timer",
       "short_name": "Timer",
       "url": "/?tab=timer",
-      "icons": [{"src": "/static/icon-192.png", "sizes": "192x192"}]
+      "icons": [{"src": "/icons/icon-192.png", "sizes": "192x192"}]
     }
   ]
 }

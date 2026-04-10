@@ -1,0 +1,10 @@
+{
+  "appId": "com.soldesp.debbiepro",
+  "appName": "DEBBIE PRO",
+  "webDir": "public",
+  "bundledWebRuntime": false,
+  "ios": {
+    "contentInset": "automatic",
+    "allowsLinkPreview": false
+  }
+}

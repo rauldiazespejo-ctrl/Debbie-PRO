@@ -1,9 +1,13 @@
-﻿const CACHE_NAME = 'debbie-pro-v47';
-const APP_VERSION = '47';
+﻿const CACHE_NAME = 'debbie-pro-v48';
+const APP_VERSION = '48';
 
 const ASSETS = [
   '/',
   '/index.html',
+  '/favicon.ico',
+  '/icons/icon-192.png',
+  '/icons/icon-512.png',
+  '/icons/favicon-32.png',
   '/static/app.js',
   '/static/styles.css',
   '/static/exercises-extra.js',
@@ -89,7 +93,9 @@ self.addEventListener('message', e => {
       return Promise.all(keys.map(k => caches.delete(k)));
     }).then(() => {
       self.skipWaiting();
-      e.source.postMessage('UPDATED');
+      if (e.source && e.source.postMessage) {
+        e.source.postMessage({ type: 'SW_UPDATED', version: APP_VERSION });
+      }
     });
   }
 });

@@ -1,6 +1,6 @@
 ﻿
 // === AUTO_UPDATE_SYSTEM v33 ===
-const LOCAL_APP_VERSION = '47';
+const LOCAL_APP_VERSION = '48';
 
 async function checkForUpdates() {
   try {

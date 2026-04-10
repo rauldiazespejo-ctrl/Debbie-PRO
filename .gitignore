@@ -1,5 +1,9 @@
 node_modules/
 .firebase/
+ios/App/Pods/
+ios/App/build/
+*.xcuserstate
+xcuserdata/
 _v*.js
 _fix*.js
 *.log
