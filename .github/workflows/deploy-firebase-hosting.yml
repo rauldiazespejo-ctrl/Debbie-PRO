@@ -1,8 +1,16 @@
-# Despliegue automático a Firebase Hosting al hacer push en main/master.
-# Configuración obligatoria en el repositorio GitHub:
-#   Settings → Secrets and variables → Actions → New repository secret
-#   Nombre: FIREBASE_TOKEN
-#   Valor: salida de `firebase login:ci` (Firebase CLI en tu máquina local).
+# Despliegue automático a Firebase Hosting (push a main/master o manual).
+#
+# Configura UNO de estos secretos en GitHub:
+#   Settings → Secrets and variables → Actions → Repository secrets
+#
+# 1) FIREBASE_SERVICE_ACCOUNT (recomendado)
+#    Firebase Console → Configuración del proyecto → Cuentas de servicio
+#    → Generar nueva clave privada → pegar TODO el JSON en el secreto.
+#
+# 2) FIREBASE_TOKEN (alternativa)
+#    En tu PC: npm i -g firebase-tools && firebase login:ci
+#    Pega el token en el secreto.
+#
 name: Deploy Firebase Hosting
 
 on:
@@ -11,6 +19,10 @@ on:
       - main
       - master
   workflow_dispatch:
+
+concurrency:
+  group: firebase-hosting-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -22,7 +34,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Deploy to Firebase Hosting
-        run: npx firebase-tools@latest deploy --only hosting --project basededatosdebbiepro --non-interactive
+      - name: Desplegar a Firebase Hosting
         env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -n "${FIREBASE_SERVICE_ACCOUNT:-}" ]; then
+            printf '%s\n' "$FIREBASE_SERVICE_ACCOUNT" > "${RUNNER_TEMP}/firebase-sa.json"
+            export GOOGLE_APPLICATION_CREDENTIALS="${RUNNER_TEMP}/firebase-sa.json"
+          elif [ -z "${FIREBASE_TOKEN:-}" ]; then
+            echo "::error title=Falta autenticación::Añade el secreto FIREBASE_SERVICE_ACCOUNT (JSON) o FIREBASE_TOKEN. Ver comentarios al inicio de .github/workflows/deploy-firebase-hosting.yml"
+            exit 1
+          fi
+          npx --yes firebase-tools@latest deploy --only hosting --project basededatosdebbiepro --non-interactive
