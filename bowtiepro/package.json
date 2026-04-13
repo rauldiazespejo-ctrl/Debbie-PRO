@@ -1,0 +1,40 @@
+{
+  "name": "webapp",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && npm run build:client",
+    "build:vercel": "vite build -c vite.vercel.config.ts && vite build -c vite.client.vercel.config.ts",
+    "build:netlify": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\" && vite build -c vite.netlify.config.ts && vite build -c vite.client.config.ts",
+    "preview": "wrangler pages dev",
+    "deploy": "npm run build && wrangler pages deploy",
+    "deploy:netlify": "npm run build:netlify && npx netlify-cli deploy --prod --dir=dist --functions=netlify/functions",
+    "deploy:vercel": "npm run build:vercel && npx vercel deploy --prebuilt",
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings",
+    "build:client": "vite build -c vite.client.config.ts"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.19.0",
+    "@xyflow/react": "^12.10.2",
+    "clsx": "^2.1.1",
+    "hono": "^4.12.12",
+    "html-to-image": "^1.11.13",
+    "jspdf": "^4.2.1",
+    "lucide-react": "^1.7.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-router-dom": "^7.14.0",
+    "tailwind-merge": "^3.5.0"
+  },
+  "devDependencies": {
+    "@hono/vite-build": "^1.2.0",
+    "@hono/vite-dev-server": "^0.18.2",
+    "@tailwindcss/vite": "^4.2.2",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^4.7.0",
+    "tailwindcss": "^4.2.2",
+    "vite": "^6.3.5",
+    "wrangler": "^4.4.0"
+  }
+}

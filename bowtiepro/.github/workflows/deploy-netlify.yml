@@ -1,0 +1,37 @@
+# Requiere en GitHub → Settings → Secrets and variables → Actions:
+#   NETLIFY_AUTH_TOKEN  (https://app.netlify.com/user/applications#personal-access-tokens)
+#   NETLIFY_SITE_ID     (Site settings → General → Site details → API ID)
+
+name: Deploy production (Netlify)
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install and build
+        run: npm ci && npm run build:netlify
+
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v3.0
+        with:
+          publish-dir: ./dist
+          functions-dir: ./netlify/functions
+          production-branch: main
+          production-deploy: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: ${{ github.event.head_commit.message }}
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
